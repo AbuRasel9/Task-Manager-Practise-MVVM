@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager_practice/common/extension/context_extension.dart';
 
-class CustomTextFormFeild extends StatelessWidget {
+class CustomTextFormField extends StatelessWidget {
   final String hintText;
   final Color? fillColor;
   final Widget? prefixIcon;
@@ -9,7 +9,7 @@ class CustomTextFormFeild extends StatelessWidget {
   final Widget? postfixIcon;
   final int? borderRadious;
 
-  const CustomTextFormFeild(
+  const CustomTextFormField.CustomTextFormField(
       {super.key,
       required this.hintText,
       this.fillColor,

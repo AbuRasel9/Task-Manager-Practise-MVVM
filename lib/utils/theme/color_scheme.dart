@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 class ColorSchemeConfig {
   static final lightColorScheme =
   ColorScheme.fromSeed(seedColor: const Color(0xFF1D95C8)).copyWith(
-    primaryContainer: const Color(0xFF1D95C8),
+    primaryContainer: Colors.blue,
     brightness: Brightness.light,
-    primary: const Color(0x6B1D3FC8),
+    primary: const Color(0xFF3b5999),
     onPrimary: Colors.white,
     secondary: const Color(0x1B1D3FC8),
     onSecondary: Colors.white,
@@ -20,6 +20,7 @@ class ColorSchemeConfig {
     onTertiary: CupertinoColors.systemGrey5,
     surface: Colors.white,
     surfaceTint: Colors.transparent,
+    inverseSurface: Colors.yellow
   );
 
   static final darkColorScheme =
