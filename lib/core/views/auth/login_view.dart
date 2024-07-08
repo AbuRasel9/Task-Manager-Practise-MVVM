@@ -1,5 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task_manager_practice/common/extension/context_extension.dart';
+import 'package:task_manager_practice/core/model/auth/login_request.dart';
+import 'package:task_manager_practice/core/provider/authProvider/auth_provider.dart';
+import 'package:task_manager_practice/core/views/home_view/main_bootom_nav.dart';
+import 'package:task_manager_practice/utils/constants/enum.dart';
+import 'package:task_manager_practice/utils/route/route_name.dart';
+
+import '../../../common/widget/custom_button.dart';
+import '../../../common/widget/custom_field.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -9,19 +20,50 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  bool _isSignUpScreen = true;
-  bool _isMale = true;
-  bool _isRemember = false;
-  final _form = GlobalKey<FormState>();
+  //<<-------------->> function <<-------------->>//
+  Future<void> loginFunction(context) async {
+    final provider = Provider.of<AuthProvider>(context, listen: false);
+
+    final response = await provider.login(
+      LoginModelRequest(
+        email: _emailController.text,
+        password: _passwordController.text,
+      ),
+    );
+    print(response.status);
+    if (response.status == "success") {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => MainBottomNavBar()),
+          (route) => false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Login Successfull",style: TextStyle(color: Colors.black),),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please Enter Correct email or password",style: TextStyle(color: Colors.black),),
+        ),
+      );
+    }
+  }
+
+  @override
+  initState() {
+    super.initState();
+  }
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
-    final screenSize = context.screenSize;
     return Scaffold(
       body: Form(
+        key: _formKey,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -30,37 +72,50 @@ class _LoginViewState extends State<LoginView> {
             children: [
               //<<-------------->> email <<-------------->>//
 
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                    hintText: "Enter email", border: OutlineInputBorder()),
+              CustomField(
+                passwordController: _emailController,
+                hintText: 'Enter Email',
+                validatorText: "Email",
               ),
               const SizedBox(
                 height: 10,
               ),
 
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                    hintText: "Enter password", border: OutlineInputBorder()),
+              CustomField(
+                passwordController: _passwordController,
+                hintText: 'Enter Password',
+                validatorText: "Password",
               ),
               const SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: theme.colorScheme.primary),
-                    onPressed: () {},
-                    child: Text(
-                      "Login",
-                      style: theme.textTheme.bodySmall
-                          ?.copyWith(color: theme.colorScheme.onPrimary),
-                    ),
-                  )),
+
               const SizedBox(
                 height: 10,
+              ),
+              Consumer<AuthProvider>(
+                builder: (BuildContext context, data, Widget? child) {
+                  return data.isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : CustomButton(
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              loginFunction(context);
+                            }
+                          },
+                          buttonText: data.isLoading
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Text(
+                                  "Login",
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                      color: theme.colorScheme.onSecondary),
+                                ),
+                        );
+                },
               ),
               TextButton(
                 onPressed: () {},
