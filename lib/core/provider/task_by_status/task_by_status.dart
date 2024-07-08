@@ -10,9 +10,9 @@ import '../../../network_requester/network_requester.dart';
 
 class TaskByStatus with ChangeNotifier{
   //<<-------------->>  variable create complete task <<-------------->>//
-  List<TaskComplete> _completeTask=[];
+  List<TaskByStatus> _completeTask=[];
   //get complete task
-  List<TaskComplete> get completeTask=>_completeTask;
+  List<TaskByStatus> get completeTask=>_completeTask;
 
   //api call
   bool _isLoading = false;
@@ -23,7 +23,7 @@ class TaskByStatus with ChangeNotifier{
     _isLoading = true;
 
     final response = await NetworkRequester().completedTask();
-    print(jsonEncode("jjjjjjjjjjj${response}"));
+    print(jsonEncode("jjjjjjjjjjj${}"));
 
     // _completeTask=response.data ?? TaskComplete();
     // print(_completeTask);

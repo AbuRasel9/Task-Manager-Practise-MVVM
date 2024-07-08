@@ -4,16 +4,38 @@
 
 import 'dart:convert';
 
+TaskByStatus loginModelRequestFromJson(String str) => TaskByStatus.fromJson(json.decode(str));
 
+String loginModelRequestToJson(TaskByStatus data) => json.encode(data.toJson());
 
-class TaskComplete {
+class TaskByStatus {
+  String? status;
+  List<Datum>? data;
+
+  TaskByStatus({
+    this.status,
+    this.data,
+  });
+
+  factory TaskByStatus.fromJson(Map<String, dynamic> json) => TaskByStatus(
+    status: json["status"],
+    data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
+}
+
+class Datum {
   String? id;
   String? title;
   String? description;
   String? status;
   String? createdDate;
 
-  TaskComplete({
+  Datum({
     this.id,
     this.title,
     this.description,
@@ -21,7 +43,7 @@ class TaskComplete {
     this.createdDate,
   });
 
-  factory TaskComplete.fromJson(Map<String, dynamic> json) => TaskComplete(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["_id"],
     title: json["title"],
     description: json["description"],

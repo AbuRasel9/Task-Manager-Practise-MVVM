@@ -42,7 +42,7 @@ class NetworkRequester {
 
 
 
-  Future<BaseResponse<List<TaskComplete>>?> completedTask() async {
+  Future<TaskByStatus> completedTask() async {
 
     try {
 
@@ -59,16 +59,13 @@ class NetworkRequester {
       print(response.statusCode);
 
       if (response.statusCode == 200) {
-        print("response.statusCode");
-        print(jsonEncode(response.body));
-        final result=jsonDecode(response.body);
 
 
-        return ;
+        return jsonDecode(response.body) ;
       }
     } catch (e) {
       print("$e exception");
     }
-    return null;
+    return TaskByStatus();
   }
 }
